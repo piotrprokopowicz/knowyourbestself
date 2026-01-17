@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       email,
       feedbackUrl,
       feedbackRequest.title,
-      feedbackRequest.title
+      feedbackRequest.context
     )
 
     if (!result.success) {

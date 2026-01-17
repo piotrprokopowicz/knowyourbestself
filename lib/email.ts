@@ -6,9 +6,16 @@ export async function sendFeedbackInvitation(
   toEmail: string,
   feedbackLink: string,
   requesterName: string,
-  requestTitle: string
+  requestContext?: string | null
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    const contextSection = requestContext
+      ? `<div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; margin: 20px 0;">
+          <p style="margin: 0; color: #6b7280; font-size: 14px;">Context:</p>
+          <p style="margin: 5px 0 0 0;">${requestContext}</p>
+        </div>`
+      : ''
+
     const { error } = await resend.emails.send({
       from: 'Know Your Best Self <hello@knowyourbestself.org>',
       to: toEmail,
@@ -23,7 +30,7 @@ export async function sendFeedbackInvitation(
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-    <h1 style="color: white; margin: 0; font-size: 24px;">Best Reflected Self</h1>
+    <h1 style="color: white; margin: 0; font-size: 24px;">Know Your Best Self</h1>
   </div>
 
   <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb; border-top: none;">
@@ -33,10 +40,7 @@ export async function sendFeedbackInvitation(
 
     <p>They've asked you to share your perspective because you know them well and can provide valuable insight.</p>
 
-    <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; margin: 20px 0;">
-      <p style="margin: 0; color: #6b7280; font-size: 14px;">Feedback Request:</p>
-      <p style="margin: 5px 0 0 0; font-weight: 600;">${requestTitle}</p>
-    </div>
+    ${contextSection}
 
     <p>Your feedback is anonymous and will help them understand:</p>
     <ul style="color: #4b5563;">
