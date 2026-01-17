@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
       <nav className="flex items-center justify-between px-6 py-4 md:px-12">
-        <div className="text-xl font-bold text-white">BRF</div>
+        <div className="text-xl font-bold text-white">Know Your Best Self</div>
         <div className="flex gap-4">
           <Link
             href="/login"
@@ -139,7 +139,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-white/10 py-8 text-center text-white/60">
-        <p>&copy; 2024 Best Reflected Self. All rights reserved.</p>
+        <p>&copy; 2025 Know Your Best Self. All rights reserved.</p>
       </footer>
     </div>
   )

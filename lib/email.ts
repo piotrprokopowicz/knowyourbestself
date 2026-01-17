@@ -5,17 +5,9 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 export async function sendFeedbackInvitation(
   toEmail: string,
   feedbackLink: string,
-  requesterName: string,
-  requestContext?: string | null
+  requesterName: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const contextSection = requestContext
-      ? `<div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; margin: 20px 0;">
-          <p style="margin: 0; color: #6b7280; font-size: 14px;">Context:</p>
-          <p style="margin: 5px 0 0 0;">${requestContext}</p>
-        </div>`
-      : ''
-
     const { error } = await resend.emails.send({
       from: 'Know Your Best Self <hello@knowyourbestself.org>',
       to: toEmail,
@@ -39,8 +31,6 @@ export async function sendFeedbackInvitation(
     <p><strong>${requesterName}</strong> is working on understanding their strengths and positive impact on others through the "Best Reflected Self" exercise.</p>
 
     <p>They've asked you to share your perspective because you know them well and can provide valuable insight.</p>
-
-    ${contextSection}
 
     <p>Your feedback is anonymous and will help them understand:</p>
     <ul style="color: #4b5563;">

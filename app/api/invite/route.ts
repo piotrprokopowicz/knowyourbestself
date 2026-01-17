@@ -48,8 +48,7 @@ export async function POST(request: Request) {
     const result = await sendFeedbackInvitation(
       email,
       feedbackUrl,
-      feedbackRequest.title,
-      feedbackRequest.context
+      feedbackRequest.title
     )
 
     if (!result.success) {
