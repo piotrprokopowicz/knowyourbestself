@@ -10,7 +10,7 @@ export async function sendFeedbackInvitation(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const { error } = await resend.emails.send({
-      from: 'Know Your Best Self <hello@send.knowyourbestself.org>',
+      from: 'Know Your Best Self <hello@knowyourbestself.org>',
       to: toEmail,
       subject: `${requesterName} is asking for your feedback`,
       html: `
