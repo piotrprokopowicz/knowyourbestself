@@ -37,12 +37,19 @@ Please include a dedicated section in the report that addresses how their identi
   const languageInstruction = language === 'pl'
     ? `
 
-IMPORTANT: Write the ENTIRE report in Polish (Polski). All section headings, content, and insights must be in Polish. Only the strength names in the STRENGTHS_DATA section can remain in English for parsing purposes.`
+IMPORTANT: Write the ENTIRE report in Polish (Polski). This includes:
+- All section headings and subheadings
+- All descriptive content and insights
+- The archetype name and description
+- All strength names in the STRENGTHS_DATA section (use Polish names like "Empatia", "Przywództwo", "Kreatywność")
+- All quotes should be translated to Polish
+- Everything must be in Polish - do not mix languages.`
     : ''
 
   const sectionHeadings = language === 'pl'
     ? {
         portrait: 'Twój Portret Najlepszego Ja',
+        yourArchetype: 'Twój Archetyp',
         strengthsOverview: 'Przegląd Mocnych Stron',
         coreStrengths: 'Główne Mocne Strony i Tematy',
         uniqueImpact: 'Twój Unikalny Wpływ',
@@ -54,6 +61,7 @@ IMPORTANT: Write the ENTIRE report in Polish (Polski). All section headings, con
       }
     : {
         portrait: 'Your Best Reflected Self Portrait',
+        yourArchetype: 'Your Archetype',
         strengthsOverview: 'Strengths Overview',
         coreStrengths: 'Core Strengths & Themes',
         uniqueImpact: 'Your Unique Impact',
@@ -76,14 +84,25 @@ Based on this feedback, create a comprehensive "Best Reflected Self" report. Str
 
 ## ${sectionHeadings.portrait}
 
+### ${sectionHeadings.yourArchetype}
+First, classify this person into a unique archetype that captures their essence. Provide this in the following exact format (this will be parsed by the app):
+
+<!-- ARCHETYPE_DATA_START -->
+name: [A creative 2-3 word archetype name like "Empathetic Leader", "Quiet Catalyst", "Passionate Mentor", "Thoughtful Innovator", "Steadfast Guardian", "Creative Connector", "Wise Counselor", "Dynamic Motivator", etc.]
+icon: [Choose ONE emoji that best represents this archetype: 🌟 ⭐ 💡 🎯 🔥 💪 🌊 🦁 🦋 🌱 🎨 🏔️ ⚡ 🌈 🤝 💎 🧭 🔮 👑 🌺]
+description: [One sentence describing what makes this archetype unique]
+<!-- ARCHETYPE_DATA_END -->
+
 ### ${sectionHeadings.strengthsOverview}
-At the very beginning, provide a simple strength visualization in this exact format (this will be parsed by the app):
+Provide strength data in this exact format (this will be parsed for a word cloud visualization):
 <!-- STRENGTHS_DATA_START -->
-[List 5-7 key strengths, one per line, each followed by a number 1-10 representing frequency/emphasis in feedback]
+[List 7-10 key strengths/qualities, one per line, each followed by a number 1-10 representing frequency/emphasis in feedback. Higher numbers = larger in word cloud]
 Example format:
 Leadership: 8
 Empathy: 9
 Problem Solving: 7
+Creativity: 6
+Communication: 8
 <!-- STRENGTHS_DATA_END -->
 
 ### ${sectionHeadings.coreStrengths}
@@ -113,7 +132,9 @@ Based on these strengths, provide 3-5 actionable insights for how you can:
 ### ${sectionHeadings.bestSelfSummary}
 A 2-3 paragraph narrative that captures who you are at your best, written in second person ("You are someone who..." / "Jesteś osobą, która...").
 
-Make the report personal, insightful, and actionable. Focus on specific examples from the feedback rather than generic statements. This should feel like a meaningful portrait of someone at their best.`
+Make the report personal, insightful, and actionable. Focus on specific examples from the feedback rather than generic statements. This should feel like a meaningful portrait of someone at their best.
+
+CRITICAL: You MUST include both the <!-- ARCHETYPE_DATA_START --> and <!-- STRENGTHS_DATA_START --> blocks exactly as shown above. These are parsed by the application to create visualizations. Do not skip them or modify the format.`
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',

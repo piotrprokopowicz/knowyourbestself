@@ -2,6 +2,9 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { redirect, notFound } from 'next/navigation'
 import RequestPageClient from './RequestPageClient'
 
+// Disable caching to always fetch fresh data
+export const dynamic = 'force-dynamic'
+
 export default async function RequestPage({
   params,
 }: {

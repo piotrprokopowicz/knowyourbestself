@@ -14,6 +14,12 @@ interface StrengthData {
   value: number
 }
 
+interface ArchetypeData {
+  name: string
+  icon: string
+  description: string
+}
+
 export default function ReportView({
   content,
   title,
@@ -27,6 +33,25 @@ export default function ReportView({
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
+
+  // Parse archetype data from the report
+  const archetypeData = useMemo((): ArchetypeData | null => {
+    const match = content.match(/<!-- ARCHETYPE_DATA_START -->([\s\S]*?)<!-- ARCHETYPE_DATA_END -->/)
+    if (!match) return null
+
+    const dataSection = match[1]
+    const nameMatch = dataSection.match(/name:\s*(.+)/)
+    const iconMatch = dataSection.match(/icon:\s*(.+)/)
+    const descMatch = dataSection.match(/description:\s*(.+)/)
+
+    if (!nameMatch) return null
+
+    return {
+      name: nameMatch[1].trim(),
+      icon: iconMatch ? iconMatch[1].trim() : '🌟',
+      description: descMatch ? descMatch[1].trim() : '',
+    }
+  }, [content])
 
   // Parse strengths data from the report
   const strengthsData = useMemo((): StrengthData[] => {
@@ -43,10 +68,20 @@ export default function ReportView({
     }).filter(item => item.name && item.name.length > 0)
   }, [content])
 
-  // Remove the strengths data section from displayed content
+  // Remove the data sections from displayed content
   const displayContent = useMemo(() => {
-    return content.replace(/<!-- STRENGTHS_DATA_START -->[\s\S]*?<!-- STRENGTHS_DATA_END -->/, '')
+    return content
+      .replace(/<!-- ARCHETYPE_DATA_START -->[\s\S]*?<!-- ARCHETYPE_DATA_END -->/, '')
+      .replace(/<!-- STRENGTHS_DATA_START -->[\s\S]*?<!-- STRENGTHS_DATA_END -->/, '')
   }, [content])
+
+  // Helper function to process inline markdown formatting
+  const formatInlineMarkdown = (text: string): string => {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/"(.*?)"/g, '<q class="italic">"$1"</q>')
+  }
 
   // Simple markdown rendering
   const renderMarkdown = (text: string) => {
@@ -69,9 +104,11 @@ export default function ReportView({
             } pl-6 space-y-2 my-4`}
           >
             {currentList.map((item, i) => (
-              <li key={i} className="text-gray-700">
-                {item}
-              </li>
+              <li
+                key={i}
+                className="text-gray-700"
+                dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(item) }}
+              />
             ))}
           </ListTag>
         )
@@ -88,23 +125,26 @@ export default function ReportView({
           <h2
             key={`h2-${index}`}
             className="text-2xl font-bold text-gray-900 mt-8 mb-4 first:mt-0"
-          >
-            {line.slice(3)}
-          </h2>
+            dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(line.slice(3)) }}
+          />
         )
       } else if (line.startsWith('### ')) {
         flushList()
         elements.push(
-          <h3 key={`h3-${index}`} className="text-xl font-semibold text-gray-800 mt-6 mb-3">
-            {line.slice(4)}
-          </h3>
+          <h3
+            key={`h3-${index}`}
+            className="text-xl font-semibold text-gray-800 mt-6 mb-3"
+            dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(line.slice(4)) }}
+          />
         )
       } else if (line.startsWith('#### ')) {
         flushList()
         elements.push(
-          <h4 key={`h4-${index}`} className="text-lg font-medium text-gray-800 mt-4 mb-2">
-            {line.slice(5)}
-          </h4>
+          <h4
+            key={`h4-${index}`}
+            className="text-lg font-medium text-gray-800 mt-4 mb-2"
+            dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(line.slice(5)) }}
+          />
         )
       }
       // Bullet points
@@ -126,16 +166,11 @@ export default function ReportView({
       // Bold text and regular paragraphs
       else if (line.trim()) {
         flushList()
-        const formattedLine = line
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-          .replace(/"(.*?)"/g, '<q class="italic">$1</q>')
-
         elements.push(
           <p
             key={`p-${index}`}
             className="text-gray-700 leading-relaxed my-3"
-            dangerouslySetInnerHTML={{ __html: formattedLine }}
+            dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(line) }}
           />
         )
       }
@@ -145,16 +180,45 @@ export default function ReportView({
     return elements
   }
 
-  // Color palette for strength bars
-  const colors = [
-    'bg-purple-500',
-    'bg-indigo-500',
-    'bg-blue-500',
-    'bg-teal-500',
-    'bg-green-500',
-    'bg-yellow-500',
-    'bg-orange-500',
+  // Color palette for word cloud
+  const wordCloudColors = [
+    'text-purple-600',
+    'text-indigo-600',
+    'text-blue-600',
+    'text-teal-600',
+    'text-violet-600',
+    'text-fuchsia-600',
+    'text-pink-600',
   ]
+
+  // Calculate font size based on value (1-10 scale)
+  const getFontSize = (value: number): string => {
+    // Map 1-10 to font sizes from 0.875rem to 2.5rem
+    const minSize = 0.875
+    const maxSize = 2.5
+    const size = minSize + ((value - 1) / 9) * (maxSize - minSize)
+    return `${size}rem`
+  }
+
+  // Shuffle array for more natural word cloud appearance
+  const shuffledStrengths = useMemo(() => {
+    const sorted = [...strengthsData].sort((a, b) => b.value - a.value)
+    // Interleave high and low values for visual balance
+    const result: StrengthData[] = []
+    let left = 0
+    let right = sorted.length - 1
+    while (left <= right) {
+      if (left === right) {
+        result.push(sorted[left])
+      } else {
+        result.push(sorted[left])
+        result.push(sorted[right])
+      }
+      left++
+      right--
+    }
+    return result
+  }, [strengthsData])
 
   return (
     <div>
@@ -193,31 +257,46 @@ export default function ReportView({
         </button>
       </div>
 
-      {/* Strengths Visualization */}
+      {/* Archetype Display */}
+      {archetypeData && (
+        <div className="mb-8 p-8 bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-700 rounded-2xl shadow-lg text-center">
+          <div className="text-7xl mb-4 animate-pulse">
+            {archetypeData.icon}
+          </div>
+          <p className="text-purple-200 text-sm uppercase tracking-wider mb-2">
+            {language === 'pl' ? 'Twój Archetyp' : 'Your Archetype'}
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+            {archetypeData.name}
+          </h2>
+          <p className="text-purple-100 text-lg max-w-2xl mx-auto">
+            {archetypeData.description}
+          </p>
+        </div>
+      )}
+
+      {/* Word Cloud Visualization */}
       {strengthsData.length > 0 && (
         <div className="mb-8 p-6 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border border-purple-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
             <svg className="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" />
             </svg>
             {t('strengthsVisualization')}
           </h3>
-          <div className="space-y-3">
-            {strengthsData.map((strength, index) => (
-              <div key={strength.name} className="flex items-center gap-3">
-                <div className="w-32 text-sm font-medium text-gray-700 truncate">
-                  {strength.name}
-                </div>
-                <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full ${colors[index % colors.length]} rounded-full transition-all duration-500`}
-                    style={{ width: `${strength.value * 10}%` }}
-                  />
-                </div>
-                <div className="w-8 text-sm text-gray-500 text-right">
-                  {strength.value}/10
-                </div>
-              </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 py-4">
+            {shuffledStrengths.map((strength, index) => (
+              <span
+                key={strength.name}
+                className={`${wordCloudColors[index % wordCloudColors.length]} font-semibold hover:scale-110 transition-transform cursor-default`}
+                style={{
+                  fontSize: getFontSize(strength.value),
+                  opacity: 0.7 + (strength.value / 10) * 0.3,
+                }}
+                title={`${strength.name}: ${strength.value}/10`}
+              >
+                {strength.name}
+              </span>
             ))}
           </div>
         </div>
