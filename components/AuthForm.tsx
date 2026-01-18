@@ -17,6 +17,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
+  const [showResetOption, setShowResetOption] = useState(false)
   const router = useRouter()
   const supabase = createClient()
   const { t } = useLanguage()
@@ -29,7 +30,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -38,6 +39,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
         })
 
         if (error) throw error
+
+        // Check if user already exists (Supabase returns user with identities = [] for existing users)
+        if (data.user && data.user.identities && data.user.identities.length === 0) {
+          setError(t('emailAlreadyExists'))
+          setShowResetOption(true)
+          return
+        }
+
         setMessage(t('checkEmailConfirmation'))
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -97,12 +106,22 @@ export default function AuthForm({ mode }: AuthFormProps) {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                {t('password')}
-              </label>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  {t('password')}
+                </label>
+                {mode === 'login' && (
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-purple-600 hover:text-purple-500"
+                  >
+                    {t('forgotPassword')}
+                  </Link>
+                )}
+              </div>
               <input
                 id="password"
                 type="password"
@@ -117,7 +136,15 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
             {error && (
               <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600">
-                {error}
+                <p>{error}</p>
+                {showResetOption && (
+                  <Link
+                    href="/forgot-password"
+                    className="block mt-2 font-medium text-red-700 hover:text-red-600 underline"
+                  >
+                    {t('wantToResetPassword')}
+                  </Link>
+                )}
               </div>
             )}
 
