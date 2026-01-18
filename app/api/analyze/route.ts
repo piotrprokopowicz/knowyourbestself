@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { requestId } = body
+    const { requestId, language = 'en' } = body
 
     if (!requestId) {
       return NextResponse.json(
@@ -86,12 +86,13 @@ export async function POST(request: Request) {
           .eq('request_id', requestId)
       }
 
-      // Generate report using Claude with challenges
+      // Generate report using Claude with challenges and language preference
       const reportContent = await generateBestReflectedSelfReport(
         responses,
         feedbackRequest.title,
         feedbackRequest.context,
-        feedbackRequest.challenges
+        feedbackRequest.challenges,
+        language
       )
 
       // Save report

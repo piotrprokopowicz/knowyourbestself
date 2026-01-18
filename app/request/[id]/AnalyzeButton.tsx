@@ -13,7 +13,7 @@ export default function AnalyzeButton({ requestId, isRegenerate = false }: Analy
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   const handleAnalyze = async () => {
     setLoading(true)
@@ -23,7 +23,7 @@ export default function AnalyzeButton({ requestId, isRegenerate = false }: Analy
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ requestId }),
+        body: JSON.stringify({ requestId, language }),
       })
 
       const data = await response.json()

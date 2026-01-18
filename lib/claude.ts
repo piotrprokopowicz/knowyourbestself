@@ -9,7 +9,8 @@ export async function generateBestReflectedSelfReport(
   feedbackResponses: FeedbackResponse[],
   requestTitle: string,
   requestContext?: string | null,
-  challenges?: string | null
+  challenges?: string | null,
+  language: 'en' | 'pl' = 'en'
 ): Promise<string> {
   const feedbackSummary = feedbackResponses
     .map((response, index) => {
@@ -33,7 +34,37 @@ The user has also shared some challenges or obstacles they are currently facing:
 Please include a dedicated section in the report that addresses how their identified strengths can help them overcome these specific challenges. Be practical and actionable.`
     : ''
 
-  const prompt = `You are an expert in the "Best Reflected Self" exercise, a powerful self-development methodology that helps people understand their unique strengths and positive impact on others through feedback from people who know them.
+  const languageInstruction = language === 'pl'
+    ? `
+
+IMPORTANT: Write the ENTIRE report in Polish (Polski). All section headings, content, and insights must be in Polish. Only the strength names in the STRENGTHS_DATA section can remain in English for parsing purposes.`
+    : ''
+
+  const sectionHeadings = language === 'pl'
+    ? {
+        portrait: 'Twój Portret Najlepszego Ja',
+        strengthsOverview: 'Przegląd Mocnych Stron',
+        coreStrengths: 'Główne Mocne Strony i Tematy',
+        uniqueImpact: 'Twój Unikalny Wpływ',
+        keyQualities: 'Kluczowe Cechy',
+        powerfulStories: 'Inspirujące Historie i Momenty',
+        overcomingChallenges: 'Pokonywanie Twoich Wyzwań',
+        insightsForGrowth: 'Wskazówki do Rozwoju',
+        bestSelfSummary: 'Podsumowanie Twojego Najlepszego Ja',
+      }
+    : {
+        portrait: 'Your Best Reflected Self Portrait',
+        strengthsOverview: 'Strengths Overview',
+        coreStrengths: 'Core Strengths & Themes',
+        uniqueImpact: 'Your Unique Impact',
+        keyQualities: 'Key Qualities',
+        powerfulStories: 'Powerful Stories & Moments',
+        overcomingChallenges: 'Overcoming Your Challenges',
+        insightsForGrowth: 'Insights for Growth',
+        bestSelfSummary: 'Your Best Self Summary',
+      }
+
+  const prompt = `You are an expert in the "Best Reflected Self" exercise, a powerful self-development methodology that helps people understand their unique strengths and positive impact on others through feedback from people who know them.${languageInstruction}
 
 A user named "${requestTitle}" has collected feedback from ${feedbackResponses.length} people who know them well.${requestContext ? ` Context: ${requestContext}` : ''}
 
@@ -43,9 +74,9 @@ ${feedbackSummary}${challengesSection}
 
 Based on this feedback, create a comprehensive "Best Reflected Self" report. Structure it as follows:
 
-## Your Best Reflected Self Portrait
+## ${sectionHeadings.portrait}
 
-### Strengths Overview
+### ${sectionHeadings.strengthsOverview}
 At the very beginning, provide a simple strength visualization in this exact format (this will be parsed by the app):
 <!-- STRENGTHS_DATA_START -->
 [List 5-7 key strengths, one per line, each followed by a number 1-10 representing frequency/emphasis in feedback]
@@ -55,32 +86,32 @@ Empathy: 9
 Problem Solving: 7
 <!-- STRENGTHS_DATA_END -->
 
-### Core Strengths & Themes
+### ${sectionHeadings.coreStrengths}
 Identify 3-5 recurring themes or strengths that appear across multiple pieces of feedback. For each theme:
 - Give it a clear, memorable name
 - Explain how it manifests based on the feedback
 - Include specific examples or quotes from the feedback
 
-### Your Unique Impact
+### ${sectionHeadings.uniqueImpact}
 Describe how you positively impact others. What do people experience when they interact with you? What makes you memorable?
 
-### Key Qualities
+### ${sectionHeadings.keyQualities}
 List the top qualities that define you at your best, drawing from the feedback received.
 
-### Powerful Stories & Moments
+### ${sectionHeadings.powerfulStories}
 Highlight 2-3 specific stories or moments that were shared in the feedback that exemplify you at your best.
 ${challenges ? `
-### Overcoming Your Challenges
+### ${sectionHeadings.overcomingChallenges}
 Based on the challenges shared ("${challenges}"), explain how the identified strengths can be leveraged to overcome these obstacles. Provide specific, actionable strategies.
 ` : ''}
-### Insights for Growth
+### ${sectionHeadings.insightsForGrowth}
 Based on these strengths, provide 3-5 actionable insights for how you can:
 - Leverage these strengths more intentionally
 - Apply them in new contexts
 - Build on your natural gifts
 
-### Your Best Self Summary
-A 2-3 paragraph narrative that captures who you are at your best, written in second person ("You are someone who...").
+### ${sectionHeadings.bestSelfSummary}
+A 2-3 paragraph narrative that captures who you are at your best, written in second person ("You are someone who..." / "Jesteś osobą, która...").
 
 Make the report personal, insightful, and actionable. Focus on specific examples from the feedback rather than generic statements. This should feel like a meaningful portrait of someone at their best.`
 
