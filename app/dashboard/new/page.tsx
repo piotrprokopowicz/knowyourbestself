@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -9,7 +9,7 @@ import { useLanguage } from '@/lib/LanguageContext'
 import LanguageToggle from '@/components/LanguageToggle'
 
 export default function NewRequestPage() {
-  const [title, setTitle] = useState('')
+  const [name, setName] = useState('')
   const [context, setContext] = useState('')
   const [emailTemplate, setEmailTemplate] = useState('')
   const [challenges, setChallenges] = useState('')
@@ -18,6 +18,11 @@ export default function NewRequestPage() {
   const router = useRouter()
   const supabase = createClient()
   const { t } = useLanguage()
+
+  // Pre-fill email template with default when component mounts or language changes
+  useEffect(() => {
+    setEmailTemplate(t('defaultEmailTemplate'))
+  }, [t])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,7 +44,7 @@ export default function NewRequestPage() {
         .from('feedback_requests')
         .insert({
           user_id: user.id,
-          title,
+          title: name,
           context: context || null,
           email_template: emailTemplate || null,
           challenges: challenges || null,
@@ -105,22 +110,22 @@ export default function NewRequestPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
-                htmlFor="title"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                {t('title')}
+                {t('yourNameLabel')}
               </label>
               <p className="text-sm text-gray-500 mt-1">
-                {t('titleHint')}
+                {t('yourNameHint')}
               </p>
               <input
-                id="title"
+                id="name"
                 type="text"
                 required
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="mt-2 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                placeholder={t('titlePlaceholder')}
+                placeholder={t('yourNamePlaceholder')}
               />
             </div>
 
@@ -158,9 +163,8 @@ export default function NewRequestPage() {
                 id="emailTemplate"
                 value={emailTemplate}
                 onChange={(e) => setEmailTemplate(e.target.value)}
-                rows={4}
+                rows={8}
                 className="mt-2 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                placeholder={t('emailTemplatePlaceholder')}
               />
             </div>
 

@@ -69,15 +69,22 @@ export const translations = {
     newFeedbackRequest: 'New Feedback Request',
     createFeedbackRequest: 'Create a Feedback Request',
     createRequestDesc: "Set up a request to collect feedback from people who know you well. You'll get a shareable link to send to respondents.",
-    title: 'Title',
-    titleHint: 'This will be shown to respondents. Often this is your name.',
-    titlePlaceholder: "e.g., John's Best Self Feedback",
+    yourNameLabel: 'Your Name *',
+    yourNameHint: 'Enter your name as you want it to appear in the feedback request and emails sent to respondents.',
+    yourNamePlaceholder: 'e.g., John Smith',
     context: 'Context (optional)',
     contextHint: "Add any additional context for respondents about what you're looking for.",
     contextPlaceholder: "e.g., I'm working on understanding my strengths as part of a leadership development program...",
-    emailTemplate: 'Email Template (optional)',
-    emailTemplateHint: 'Customize the message sent to feedback givers. Leave empty to use the default template.',
-    emailTemplatePlaceholder: 'Write a personalized message to your feedback givers...',
+    emailTemplate: 'Email Message',
+    emailTemplateHint: 'This is the message that will be sent to people you invite. You can customize it below.',
+    defaultEmailTemplate: `I'm working on understanding my strengths and positive impact on others through the "Best Reflected Self" exercise.
+
+I've asked you to share your perspective because you know me well and can provide valuable insight.
+
+Your feedback is anonymous and will help me understand:
+• My key strengths and positive qualities
+• Memorable moments when I was at my best
+• The unique value I bring to relationships`,
     challenges: 'Challenges to Address (optional)',
     challengesHint: 'What challenges or obstacles are you facing? The report will include insights on how your strengths can help.',
     challengesPlaceholder: 'e.g., I want to improve my leadership presence, handle difficult conversations better...',
@@ -231,15 +238,22 @@ export const translations = {
     newFeedbackRequest: 'Nowa Prośba o Feedback',
     createFeedbackRequest: 'Utwórz Prośbę o Feedback',
     createRequestDesc: 'Przygotuj prośbę o zbieranie opinii od osób, które Cię dobrze znają. Otrzymasz unikalny link do udostępnienia.',
-    title: 'Tytuł',
-    titleHint: 'To zostanie pokazane respondentom. Często jest to Twoje imię.',
-    titlePlaceholder: 'np. Feedback dla Jana',
+    yourNameLabel: 'Twoje Imię i Nazwisko *',
+    yourNameHint: 'Wpisz swoje imię tak, jak ma się pojawić w prośbie o feedback i emailach wysyłanych do respondentów.',
+    yourNamePlaceholder: 'np. Jan Kowalski',
     context: 'Kontekst (opcjonalnie)',
     contextHint: 'Dodaj dodatkowy kontekst dla respondentów o tym, czego szukasz.',
     contextPlaceholder: 'np. Pracuję nad zrozumieniem moich mocnych stron w ramach programu rozwoju przywództwa...',
-    emailTemplate: 'Szablon Email (opcjonalnie)',
-    emailTemplateHint: 'Dostosuj wiadomość wysyłaną do osób dających feedback. Pozostaw puste, aby użyć domyślnego szablonu.',
-    emailTemplatePlaceholder: 'Napisz spersonalizowaną wiadomość do osób dających feedback...',
+    emailTemplate: 'Treść Wiadomości Email',
+    emailTemplateHint: 'To jest wiadomość, która zostanie wysłana do osób, które zaprosisz. Możesz ją dostosować poniżej.',
+    defaultEmailTemplate: `Pracuję nad zrozumieniem moich mocnych stron i pozytywnego wpływu na innych poprzez ćwiczenie "Najlepsze Odbicie Siebie".
+
+Poprosiłem/am Cię o podzielenie się swoją perspektywą, ponieważ dobrze mnie znasz i możesz dostarczyć cennych spostrzeżeń.
+
+Twoja opinia jest anonimowa i pomoże mi zrozumieć:
+• Moje kluczowe mocne strony i pozytywne cechy
+• Pamiętne momenty, kiedy byłem/am w najlepszej formie
+• Unikalną wartość, którą wnoszę do relacji`,
     challenges: 'Wyzwania do Rozwiązania (opcjonalnie)',
     challengesHint: 'Jakie wyzwania lub przeszkody napotykasz? Raport będzie zawierał wskazówki, jak Twoje mocne strony mogą pomóc.',
     challengesPlaceholder: 'np. Chcę poprawić swoją obecność przywódczą, lepiej radzić sobie z trudnymi rozmowami...',
