@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 export default function InviteForm({ requestId }: { requestId: string }) {
-  const [email, setEmail] = useState('')
+  const [emails, setEmails] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{
     type: 'success' | 'error'
@@ -15,50 +15,75 @@ export default function InviteForm({ requestId }: { requestId: string }) {
     setLoading(true)
     setMessage(null)
 
-    try {
-      const response = await fetch('/api/invite', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ requestId, email }),
-      })
+    // Parse emails (split by comma, semicolon, or newline)
+    const emailList = emails
+      .split(/[,;\n]+/)
+      .map((email) => email.trim())
+      .filter((email) => email.length > 0)
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send invitation')
-      }
-
-      setMessage({ type: 'success', text: 'Invitation sent!' })
-      setEmail('')
-    } catch (err) {
-      setMessage({
-        type: 'error',
-        text: err instanceof Error ? err.message : 'Failed to send',
-      })
-    } finally {
+    if (emailList.length === 0) {
+      setMessage({ type: 'error', text: 'Please enter at least one email' })
       setLoading(false)
+      return
     }
+
+    let successCount = 0
+    let failCount = 0
+
+    for (const email of emailList) {
+      try {
+        const response = await fetch('/api/invite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ requestId, email }),
+        })
+
+        if (response.ok) {
+          successCount++
+        } else {
+          failCount++
+        }
+      } catch {
+        failCount++
+      }
+    }
+
+    if (failCount === 0) {
+      setMessage({
+        type: 'success',
+        text: `${successCount} invitation${successCount > 1 ? 's' : ''} sent!`,
+      })
+      setEmails('')
+    } else if (successCount === 0) {
+      setMessage({ type: 'error', text: 'Failed to send invitations' })
+    } else {
+      setMessage({
+        type: 'success',
+        text: `${successCount} sent, ${failCount} failed`,
+      })
+      setEmails('')
+    }
+
+    setLoading(false)
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex gap-2">
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="colleague@email.com"
-          className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors disabled:opacity-50"
-        >
-          {loading ? '...' : 'Send'}
-        </button>
-      </div>
+      <textarea
+        required
+        value={emails}
+        onChange={(e) => setEmails(e.target.value)}
+        placeholder="Enter email addresses (one per line or comma-separated)"
+        rows={3}
+        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+      />
+      <button
+        type="submit"
+        disabled={loading}
+        className="mt-2 w-full px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors disabled:opacity-50"
+      >
+        {loading ? 'Sending...' : 'Send Invitations'}
+      </button>
       {message && (
         <p
           className={`mt-2 text-xs ${
@@ -69,7 +94,7 @@ export default function InviteForm({ requestId }: { requestId: string }) {
         </p>
       )}
       <p className="mt-2 text-xs text-gray-500">
-        We&apos;ll send them an email with your feedback link.
+        Enter multiple emails separated by commas or new lines.
       </p>
     </form>
   )

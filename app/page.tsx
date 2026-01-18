@@ -139,7 +139,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-white/10 py-8 text-center text-white/60">
-        <p>&copy; 2025 Know Your Best Self. All rights reserved.</p>
+        <p>&copy; 2026 Know Your Best Self. All rights reserved.</p>
       </footer>
     </div>
   )
