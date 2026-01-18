@@ -59,7 +59,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 px-4">
       <div className="absolute top-4 right-4">
-        <LanguageToggle className="bg-white/10 rounded-lg p-1" />
+        <LanguageToggle variant="dark" />
       </div>
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">

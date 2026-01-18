@@ -12,7 +12,7 @@ export default function Home() {
       <nav className="flex items-center justify-between px-6 py-4 md:px-12">
         <div className="text-xl font-bold text-white">{t('appName')}</div>
         <div className="flex items-center gap-4">
-          <LanguageToggle className="mr-2" />
+          <LanguageToggle variant="dark" className="mr-2" />
           <Link
             href="/login"
             className="rounded-lg px-4 py-2 text-white hover:bg-white/10 transition-colors"

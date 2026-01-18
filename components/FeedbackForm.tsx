@@ -72,7 +72,7 @@ export default function FeedbackForm({
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center px-4">
         <div className="absolute top-4 right-4">
-          <LanguageToggle className="bg-white/10 rounded-lg p-1" />
+          <LanguageToggle variant="dark" />
         </div>
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -102,7 +102,7 @@ export default function FeedbackForm({
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 py-12 px-4">
       <div className="absolute top-4 right-4">
-        <LanguageToggle className="bg-white/10 rounded-lg p-1" />
+        <LanguageToggle variant="dark" />
       </div>
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8">
