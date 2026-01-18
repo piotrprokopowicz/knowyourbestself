@@ -140,6 +140,9 @@ export default function Home() {
 
       <footer className="border-t border-white/10 py-8 text-center text-white/60">
         <p>&copy; 2026 Know Your Best Self. All rights reserved.</p>
+        <Link href="/feedback-app" className="text-white/60 hover:text-white text-sm mt-2 inline-block">
+          Share Feedback
+        </Link>
       </footer>
     </div>
   )

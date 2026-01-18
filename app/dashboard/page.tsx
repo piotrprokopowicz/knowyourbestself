@@ -39,7 +39,7 @@ export default async function DashboardPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link href="/dashboard" className="text-xl font-bold text-purple-600">
-              BRF
+              Know Your Best Self
             </Link>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-500">{user.email}</span>
@@ -113,6 +113,12 @@ export default async function DashboardPage() {
           </div>
         )}
       </main>
+
+      <footer className="border-t border-gray-200 py-6 text-center">
+        <Link href="/feedback-app" className="text-gray-500 hover:text-purple-600 text-sm">
+          Share Feedback About This App
+        </Link>
+      </footer>
     </div>
   )
 }
