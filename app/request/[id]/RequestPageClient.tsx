@@ -49,6 +49,11 @@ export default function RequestPageClient({
 }: RequestPageClientProps) {
   const { t, language } = useLanguage()
 
+  // Calculate new responses since last report
+  const newResponsesSinceReport = report && responses
+    ? responses.filter(r => new Date(r.created_at) > new Date(report.created_at)).length
+    : 0
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200">
@@ -177,24 +182,40 @@ export default function RequestPageClient({
             )}
 
             {request.status === 'completed' && report && (
-              <div className="bg-green-50 rounded-xl border border-green-200 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-lg font-semibold text-green-900">
-                      {t('reportIsReady')}
-                    </h2>
-                    <p className="text-green-700 mt-1">
-                      {t('reportReadyDesc')}
-                    </p>
+              <>
+                <div className="bg-green-50 rounded-xl border border-green-200 p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-lg font-semibold text-green-900">
+                        {t('reportIsReady')}
+                      </h2>
+                      <p className="text-green-700 mt-1">
+                        {t('reportReadyDesc')}
+                      </p>
+                    </div>
+                    <Link
+                      href={`/request/${request.id}/report`}
+                      className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
+                    >
+                      {t('viewReport')}
+                    </Link>
                   </div>
-                  <Link
-                    href={`/request/${request.id}/report`}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
-                  >
-                    {t('viewReport')}
-                  </Link>
                 </div>
-              </div>
+
+                {/* Regenerate option - always show for completed requests */}
+                <div className="bg-indigo-50 rounded-xl border border-indigo-200 p-6">
+                  <h2 className="text-lg font-semibold text-indigo-900">
+                    {newResponsesSinceReport > 0 ? t('newFeedbackAvailable') : t('regenerateReport')}
+                  </h2>
+                  <p className="text-indigo-700 mt-2">
+                    {newResponsesSinceReport > 0
+                      ? `${newResponsesSinceReport} ${t('newFeedbackDesc')}`
+                      : t('reportReadyDesc')
+                    }
+                  </p>
+                  <AnalyzeButton requestId={request.id} isRegenerate />
+                </div>
+              </>
             )}
           </div>
 

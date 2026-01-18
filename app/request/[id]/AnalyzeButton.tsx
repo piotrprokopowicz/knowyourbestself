@@ -4,7 +4,12 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLanguage } from '@/lib/LanguageContext'
 
-export default function AnalyzeButton({ requestId }: { requestId: string }) {
+interface AnalyzeButtonProps {
+  requestId: string
+  isRegenerate?: boolean
+}
+
+export default function AnalyzeButton({ requestId, isRegenerate = false }: AnalyzeButtonProps) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -40,9 +45,16 @@ export default function AnalyzeButton({ requestId }: { requestId: string }) {
       <button
         onClick={handleAnalyze}
         disabled={loading}
-        className="w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className={`w-full text-white px-4 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+          isRegenerate
+            ? 'bg-indigo-600 hover:bg-indigo-700'
+            : 'bg-purple-600 hover:bg-purple-700'
+        }`}
       >
-        {loading ? t('generatingReport') : t('generateMyReport')}
+        {loading
+          ? (isRegenerate ? t('regeneratingReport') : t('generatingReport'))
+          : (isRegenerate ? t('regenerateReport') : t('generateMyReport'))
+        }
       </button>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>

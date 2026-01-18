@@ -37,9 +37,11 @@ export async function POST(request: Request) {
       )
     }
 
-    if (feedbackRequest.status !== 'open') {
+    // Allow feedback for 'open' and 'completed' status (so users can collect more feedback after report)
+    // Only block during 'analyzing' status
+    if (feedbackRequest.status === 'analyzing') {
       return NextResponse.json(
-        { error: 'This feedback request is no longer accepting responses' },
+        { error: 'This feedback request is currently being analyzed. Please try again later.' },
         { status: 400 }
       )
     }

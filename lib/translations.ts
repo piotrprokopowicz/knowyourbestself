@@ -104,6 +104,10 @@ export const translations = {
     reportIsReady: 'Your Report is Ready!',
     reportReadyDesc: 'View your comprehensive Best Reflected Self analysis.',
     noResponsesYet: 'No responses yet. Share your link to start collecting feedback.',
+    regenerateReport: 'Regenerate Report',
+    newFeedbackAvailable: 'New Feedback Available',
+    newFeedbackDesc: 'new response(s) since last report. Regenerate to include them.',
+    regeneratingReport: 'Regenerating Report...',
 
     // Feedback Form
     shareFeedbackFor: 'Share Your Feedback',
@@ -262,6 +266,10 @@ export const translations = {
     reportIsReady: 'Twój Raport Jest Gotowy!',
     reportReadyDesc: 'Zobacz kompleksową analizę Twojego Najlepszego Odbicia Siebie.',
     noResponsesYet: 'Brak odpowiedzi. Udostępnij link, aby zacząć zbierać feedback.',
+    regenerateReport: 'Wygeneruj Ponownie Raport',
+    newFeedbackAvailable: 'Dostępny Nowy Feedback',
+    newFeedbackDesc: 'nowa/e odpowiedź/i od ostatniego raportu. Wygeneruj ponownie, aby je uwzględnić.',
+    regeneratingReport: 'Ponowne Generowanie Raportu...',
 
     // Feedback Form
     shareFeedbackFor: 'Podziel Się Opinią',

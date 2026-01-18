@@ -40,12 +40,16 @@ export async function POST(request: Request) {
       )
     }
 
-    if (feedbackRequest.status !== 'open') {
+    // Allow regeneration if status is 'open' or 'completed'
+    // Only block if currently 'analyzing'
+    if (feedbackRequest.status === 'analyzing') {
       return NextResponse.json(
-        { error: 'This request has already been analyzed' },
+        { error: 'Analysis is already in progress' },
         { status: 400 }
       )
     }
+
+    const isRegeneration = feedbackRequest.status === 'completed'
 
     // Get all feedback responses
     const { data: responses, error: responsesError } = await supabase
@@ -74,6 +78,14 @@ export async function POST(request: Request) {
       .eq('id', requestId)
 
     try {
+      // If regenerating, delete the old report first
+      if (isRegeneration) {
+        await serviceSupabase
+          .from('reports')
+          .delete()
+          .eq('request_id', requestId)
+      }
+
       // Generate report using Claude with challenges
       const reportContent = await generateBestReflectedSelfReport(
         responses,
