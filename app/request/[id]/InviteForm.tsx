@@ -10,7 +10,7 @@ export default function InviteForm({ requestId }: { requestId: string }) {
     type: 'success' | 'error'
     text: string
   } | null>(null)
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,7 +37,7 @@ export default function InviteForm({ requestId }: { requestId: string }) {
         const response = await fetch('/api/invite', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ requestId, email }),
+          body: JSON.stringify({ requestId, email, language }),
         })
 
         if (response.ok) {

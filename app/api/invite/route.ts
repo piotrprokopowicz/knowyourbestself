@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { requestId, email } = body
+    const { requestId, email, language = 'en' } = body
 
     if (!requestId || !email) {
       return NextResponse.json(
@@ -49,7 +49,8 @@ export async function POST(request: Request) {
       email,
       feedbackUrl,
       feedbackRequest.title,
-      feedbackRequest.email_template
+      feedbackRequest.email_template,
+      language
     )
 
     if (!result.success) {
