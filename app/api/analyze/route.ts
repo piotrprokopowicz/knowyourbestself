@@ -74,11 +74,12 @@ export async function POST(request: Request) {
       .eq('id', requestId)
 
     try {
-      // Generate report using Claude
+      // Generate report using Claude with challenges
       const reportContent = await generateBestReflectedSelfReport(
         responses,
         feedbackRequest.title,
-        feedbackRequest.context
+        feedbackRequest.context,
+        feedbackRequest.challenges
       )
 
       // Save report

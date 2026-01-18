@@ -44,11 +44,12 @@ export async function POST(request: Request) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
     const feedbackUrl = `${baseUrl}/feedback/${feedbackRequest.share_token}`
 
-    // Send email
+    // Send email with custom template if available
     const result = await sendFeedbackInvitation(
       email,
       feedbackUrl,
-      feedbackRequest.title
+      feedbackRequest.title,
+      feedbackRequest.email_template
     )
 
     if (!result.success) {

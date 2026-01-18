@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useLanguage } from '@/lib/LanguageContext'
+import LanguageToggle from '@/components/LanguageToggle'
 
 export default function AppFeedbackPage() {
   const [feedback, setFeedback] = useState('')
@@ -9,6 +11,7 @@ export default function AppFeedbackPage() {
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { t } = useLanguage()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,6 +40,9 @@ export default function AppFeedbackPage() {
   if (submitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center px-4">
+        <div className="absolute top-4 right-4">
+          <LanguageToggle className="bg-white/10 rounded-lg p-1" />
+        </div>
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
@@ -53,15 +59,15 @@ export default function AppFeedbackPage() {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900">Thank You!</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t('thankYou')}</h2>
           <p className="text-gray-600 mt-2">
-            Your feedback has been sent. We appreciate you taking the time to help us improve.
+            {t('feedbackSentThanks')}
           </p>
           <Link
             href="/"
             className="inline-block mt-6 text-purple-600 hover:text-purple-700 font-medium"
           >
-            ← Back to Home
+            {t('backToHome')}
           </Link>
         </div>
       </div>
@@ -70,17 +76,20 @@ export default function AppFeedbackPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 py-12 px-4">
+      <div className="absolute top-4 right-4">
+        <LanguageToggle className="bg-white/10 rounded-lg p-1" />
+      </div>
       <div className="max-w-lg mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <Link href="/" className="text-purple-600 font-bold text-xl">
-              Know Your Best Self
+              {t('appName')}
             </Link>
             <h1 className="mt-4 text-2xl font-bold text-gray-900">
-              Share Your Feedback
+              {t('shareYourFeedbackApp')}
             </h1>
             <p className="text-gray-600 mt-2">
-              Help us improve the app by sharing your thoughts, suggestions, or reporting issues.
+              {t('helpUsImprove')}
             </p>
           </div>
 
@@ -90,7 +99,7 @@ export default function AppFeedbackPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Your Email (optional)
+                {t('yourEmail')}
               </label>
               <input
                 id="email"
@@ -98,10 +107,10 @@ export default function AppFeedbackPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                placeholder="your@email.com"
+                placeholder={t('yourEmailPlaceholder')}
               />
               <p className="mt-1 text-xs text-gray-500">
-                Include if you&apos;d like us to follow up with you.
+                {t('includeForFollowUp')}
               </p>
             </div>
 
@@ -110,7 +119,7 @@ export default function AppFeedbackPage() {
                 htmlFor="feedback"
                 className="block text-sm font-medium text-gray-700"
               >
-                Your Feedback *
+                {t('yourFeedback')}
               </label>
               <textarea
                 id="feedback"
@@ -119,7 +128,7 @@ export default function AppFeedbackPage() {
                 onChange={(e) => setFeedback(e.target.value)}
                 rows={6}
                 className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                placeholder="What do you love? What could be better? Any bugs or issues?"
+                placeholder={t('feedbackPlaceholder')}
               />
             </div>
 
@@ -134,13 +143,13 @@ export default function AppFeedbackPage() {
               disabled={loading}
               className="w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? 'Sending...' : 'Send Feedback'}
+              {loading ? t('sending') : t('sendFeedback')}
             </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-gray-500">
             <Link href="/" className="text-purple-600 hover:text-purple-700">
-              ← Back to Home
+              {t('backToHome')}
             </Link>
           </p>
         </div>

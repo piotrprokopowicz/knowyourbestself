@@ -2,11 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLanguage } from '@/lib/LanguageContext'
 
 export default function AnalyzeButton({ requestId }: { requestId: string }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const { t } = useLanguage()
 
   const handleAnalyze = async () => {
     setLoading(true)
@@ -40,7 +42,7 @@ export default function AnalyzeButton({ requestId }: { requestId: string }) {
         disabled={loading}
         className="w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Generating Report...' : 'Generate My Report'}
+        {loading ? t('generatingReport') : t('generateMyReport')}
       </button>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>

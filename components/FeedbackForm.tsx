@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLanguage } from '@/lib/LanguageContext'
+import LanguageToggle from './LanguageToggle'
 
 interface FeedbackFormProps {
   requestId: string
@@ -26,6 +28,7 @@ export default function FeedbackForm({
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const { t } = useLanguage()
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -68,6 +71,9 @@ export default function FeedbackForm({
   if (submitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center px-4">
+        <div className="absolute top-4 right-4">
+          <LanguageToggle className="bg-white/10 rounded-lg p-1" />
+        </div>
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
@@ -84,10 +90,9 @@ export default function FeedbackForm({
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900">Thank You!</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t('thankYou')}</h2>
           <p className="text-gray-600 mt-2">
-            Your feedback has been submitted successfully. It will help{' '}
-            {requestTitle} understand their strengths and positive impact.
+            {t('feedbackSubmitted')} {requestTitle} {t('understandStrengths')}
           </p>
         </div>
       </div>
@@ -96,15 +101,18 @@ export default function FeedbackForm({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 py-12 px-4">
+      <div className="absolute top-4 right-4">
+        <LanguageToggle className="bg-white/10 rounded-lg p-1" />
+      </div>
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <div className="text-purple-600 font-bold text-xl mb-2">BRF</div>
+            <div className="text-purple-600 font-bold text-xl mb-2">{t('appName')}</div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Share Your Feedback
+              {t('shareFeedbackFor')}
             </h1>
             <p className="text-gray-600 mt-2">
-              for <span className="font-medium">{requestTitle}</span>
+              {t('feedbackFor')} <span className="font-medium">{requestTitle}</span>
             </p>
             {requestContext && (
               <p className="text-gray-500 text-sm mt-2 bg-gray-50 p-3 rounded-lg">
@@ -120,7 +128,7 @@ export default function FeedbackForm({
                   htmlFor="respondentName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Your Name (optional)
+                  {t('yourName')}
                 </label>
                 <input
                   id="respondentName"
@@ -129,7 +137,7 @@ export default function FeedbackForm({
                   value={formData.respondentName}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                  placeholder="Your name"
+                  placeholder={t('yourName')}
                 />
               </div>
               <div>
@@ -137,7 +145,7 @@ export default function FeedbackForm({
                   htmlFor="relationship"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Your Relationship
+                  {t('yourRelationship')}
                 </label>
                 <select
                   id="relationship"
@@ -146,15 +154,15 @@ export default function FeedbackForm({
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                 >
-                  <option value="">Select...</option>
-                  <option value="colleague">Colleague</option>
-                  <option value="manager">Manager</option>
-                  <option value="direct report">Direct Report</option>
-                  <option value="friend">Friend</option>
-                  <option value="family">Family</option>
-                  <option value="mentor">Mentor</option>
-                  <option value="mentee">Mentee</option>
-                  <option value="other">Other</option>
+                  <option value="">{t('selectRelationship')}</option>
+                  <option value="colleague">{t('colleague')}</option>
+                  <option value="manager">{t('manager')}</option>
+                  <option value="direct report">{t('directReport')}</option>
+                  <option value="friend">{t('friend')}</option>
+                  <option value="family">{t('family')}</option>
+                  <option value="mentor">{t('mentor')}</option>
+                  <option value="mentee">{t('mentee')}</option>
+                  <option value="other">{t('other')}</option>
                 </select>
               </div>
             </div>
@@ -164,11 +172,10 @@ export default function FeedbackForm({
                 htmlFor="strengths"
                 className="block text-sm font-medium text-gray-700"
               >
-                Key Strengths *
+                {t('keyStrengths')}
               </label>
               <p className="text-sm text-gray-500 mt-1">
-                What are this person&apos;s greatest strengths? What do they do
-                exceptionally well?
+                {t('keyStrengthsHint')}
               </p>
               <textarea
                 id="strengths"
@@ -178,7 +185,7 @@ export default function FeedbackForm({
                 onChange={handleChange}
                 rows={4}
                 className="mt-2 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                placeholder="Describe their key strengths..."
+                placeholder={t('keyStrengthsPlaceholder')}
               />
             </div>
 
@@ -187,11 +194,10 @@ export default function FeedbackForm({
                 htmlFor="positiveMoments"
                 className="block text-sm font-medium text-gray-700"
               >
-                Memorable Positive Moments
+                {t('memorableMoments')}
               </label>
               <p className="text-sm text-gray-500 mt-1">
-                Describe a specific time when you saw this person at their best.
-                What happened? What made it memorable?
+                {t('memorableMomentsHint')}
               </p>
               <textarea
                 id="positiveMoments"
@@ -200,7 +206,7 @@ export default function FeedbackForm({
                 onChange={handleChange}
                 rows={4}
                 className="mt-2 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                placeholder="Share a specific story or moment..."
+                placeholder={t('memorableMomentsPlaceholder')}
               />
             </div>
 
@@ -209,11 +215,10 @@ export default function FeedbackForm({
                 htmlFor="qualities"
                 className="block text-sm font-medium text-gray-700"
               >
-                Positive Qualities
+                {t('positiveQualities')}
               </label>
               <p className="text-sm text-gray-500 mt-1">
-                What qualities or characteristics make this person special? How
-                do they make others feel?
+                {t('positiveQualitiesHint')}
               </p>
               <textarea
                 id="qualities"
@@ -222,7 +227,7 @@ export default function FeedbackForm({
                 onChange={handleChange}
                 rows={3}
                 className="mt-2 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                placeholder="Describe their positive qualities..."
+                placeholder={t('positiveQualitiesPlaceholder')}
               />
             </div>
 
@@ -231,11 +236,10 @@ export default function FeedbackForm({
                 htmlFor="additionalComments"
                 className="block text-sm font-medium text-gray-700"
               >
-                Anything Else?
+                {t('anythingElse')}
               </label>
               <p className="text-sm text-gray-500 mt-1">
-                Any other thoughts you&apos;d like to share about this
-                person&apos;s positive impact?
+                {t('anythingElseHint')}
               </p>
               <textarea
                 id="additionalComments"
@@ -244,7 +248,7 @@ export default function FeedbackForm({
                 onChange={handleChange}
                 rows={3}
                 className="mt-2 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                placeholder="Any additional comments..."
+                placeholder={t('anythingElsePlaceholder')}
               />
             </div>
 
@@ -259,13 +263,12 @@ export default function FeedbackForm({
               disabled={loading}
               className="w-full bg-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? 'Submitting...' : 'Submit Feedback'}
+              {loading ? t('submitting') : t('submitFeedback')}
             </button>
           </form>
 
           <p className="mt-6 text-center text-xs text-gray-500">
-            Your feedback is valuable and will be used to help this person
-            understand their strengths. Thank you for taking the time.
+            {t('feedbackValueNote')}
           </p>
         </div>
       </div>

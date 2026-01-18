@@ -5,9 +5,26 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 export async function sendFeedbackInvitation(
   toEmail: string,
   feedbackLink: string,
-  requesterName: string
+  requesterName: string,
+  customTemplate?: string | null
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    // Use custom template if provided, otherwise use default
+    const bodyContent = customTemplate
+      ? `<p>${customTemplate.replace(/\n/g, '</p><p>')}</p>`
+      : `
+    <p><strong>${requesterName}</strong> is working on understanding their strengths and positive impact on others through the "Best Reflected Self" exercise.</p>
+
+    <p>They've asked you to share your perspective because you know them well and can provide valuable insight.</p>
+
+    <p>Your feedback is anonymous and will help them understand:</p>
+    <ul style="color: #4b5563;">
+      <li>Their key strengths and positive qualities</li>
+      <li>Memorable moments when they were at their best</li>
+      <li>The unique value they bring to relationships</li>
+    </ul>
+    `
+
     const { error } = await resend.emails.send({
       from: 'Know Your Best Self <hello@knowyourbestself.org>',
       to: toEmail,
@@ -28,16 +45,7 @@ export async function sendFeedbackInvitation(
   <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb; border-top: none;">
     <p style="font-size: 18px; margin-top: 0;">Hi there!</p>
 
-    <p><strong>${requesterName}</strong> is working on understanding their strengths and positive impact on others through the "Best Reflected Self" exercise.</p>
-
-    <p>They've asked you to share your perspective because you know them well and can provide valuable insight.</p>
-
-    <p>Your feedback is anonymous and will help them understand:</p>
-    <ul style="color: #4b5563;">
-      <li>Their key strengths and positive qualities</li>
-      <li>Memorable moments when they were at their best</li>
-      <li>The unique value they bring to relationships</li>
-    </ul>
+    ${bodyContent}
 
     <div style="text-align: center; margin: 30px 0;">
       <a href="${feedbackLink}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; display: inline-block;">Share Your Feedback</a>

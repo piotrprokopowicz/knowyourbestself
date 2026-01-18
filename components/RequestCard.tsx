@@ -2,12 +2,15 @@
 
 import Link from 'next/link'
 import { FeedbackRequest } from '@/lib/supabase'
+import { useLanguage } from '@/lib/LanguageContext'
 
 interface RequestCardProps {
   request: FeedbackRequest & { response_count: number }
 }
 
 export default function RequestCard({ request }: RequestCardProps) {
+  const { t, language } = useLanguage()
+
   const statusColors = {
     open: 'bg-green-100 text-green-700',
     analyzing: 'bg-yellow-100 text-yellow-700',
@@ -15,9 +18,9 @@ export default function RequestCard({ request }: RequestCardProps) {
   }
 
   const statusLabels = {
-    open: 'Collecting Feedback',
-    analyzing: 'Analyzing...',
-    completed: 'Report Ready',
+    open: t('collectingFeedback'),
+    analyzing: t('analyzing'),
+    completed: t('reportReady'),
   }
 
   return (
@@ -58,7 +61,7 @@ export default function RequestCard({ request }: RequestCardProps) {
                 d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
               />
             </svg>
-            <span>{request.response_count} responses</span>
+            <span>{request.response_count} {t('responses')}</span>
           </div>
           <div className="flex items-center gap-1">
             <svg
@@ -75,11 +78,14 @@ export default function RequestCard({ request }: RequestCardProps) {
               />
             </svg>
             <span>
-              {new Date(request.created_at).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-              })}
+              {new Date(request.created_at).toLocaleDateString(
+                language === 'pl' ? 'pl-PL' : 'en-US',
+                {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                }
+              )}
             </span>
           </div>
         </div>

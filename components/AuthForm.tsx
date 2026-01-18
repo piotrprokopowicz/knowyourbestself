@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useLanguage } from '@/lib/LanguageContext'
+import LanguageToggle from './LanguageToggle'
 
 interface AuthFormProps {
   mode: 'login' | 'signup'
@@ -17,6 +19,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [message, setMessage] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
+  const { t } = useLanguage()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,7 +38,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         })
 
         if (error) throw error
-        setMessage('Check your email for the confirmation link!')
+        setMessage(t('checkEmailConfirmation'))
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -55,19 +58,22 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 px-4">
+      <div className="absolute top-4 right-4">
+        <LanguageToggle className="bg-white/10 rounded-lg p-1" />
+      </div>
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <Link href="/" className="text-2xl font-bold text-purple-600">
-              BRF
+              {t('appName')}
             </Link>
             <h1 className="mt-4 text-2xl font-semibold text-gray-900">
-              {mode === 'login' ? 'Welcome back' : 'Create your account'}
+              {mode === 'login' ? t('welcomeBack') : t('createYourAccount')}
             </h1>
             <p className="mt-2 text-gray-600">
               {mode === 'login'
-                ? 'Sign in to access your dashboard'
-                : 'Start discovering your best self'}
+                ? t('signInToAccess')
+                : t('startDiscovering')}
             </p>
           </div>
 
@@ -77,7 +83,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email address
+                {t('emailAddress')}
               </label>
               <input
                 id="email"
@@ -95,7 +101,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                {t('password')}
               </label>
               <input
                 id="password"
@@ -127,32 +133,32 @@ export default function AuthForm({ mode }: AuthFormProps) {
               className="w-full rounded-lg bg-purple-600 px-4 py-3 text-white font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {loading
-                ? 'Please wait...'
+                ? t('loading')
                 : mode === 'login'
-                ? 'Sign in'
-                : 'Create account'}
+                ? t('signIn')
+                : t('signUp')}
             </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-gray-600">
             {mode === 'login' ? (
               <>
-                Don&apos;t have an account?{' '}
+                {t('dontHaveAccount')}{' '}
                 <Link
                   href="/signup"
                   className="font-medium text-purple-600 hover:text-purple-500"
                 >
-                  Sign up
+                  {t('signUp')}
                 </Link>
               </>
             ) : (
               <>
-                Already have an account?{' '}
+                {t('alreadyHaveAccount')}{' '}
                 <Link
                   href="/login"
                   className="font-medium text-purple-600 hover:text-purple-500"
                 >
-                  Sign in
+                  {t('signIn')}
                 </Link>
               </>
             )}

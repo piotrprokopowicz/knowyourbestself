@@ -8,7 +8,8 @@ const anthropic = new Anthropic({
 export async function generateBestReflectedSelfReport(
   feedbackResponses: FeedbackResponse[],
   requestTitle: string,
-  requestContext?: string | null
+  requestContext?: string | null,
+  challenges?: string | null
 ): Promise<string> {
   const feedbackSummary = feedbackResponses
     .map((response, index) => {
@@ -23,17 +24,36 @@ export async function generateBestReflectedSelfReport(
     })
     .join('\n---\n')
 
+  const challengesSection = challenges
+    ? `
+
+The user has also shared some challenges or obstacles they are currently facing:
+"${challenges}"
+
+Please include a dedicated section in the report that addresses how their identified strengths can help them overcome these specific challenges. Be practical and actionable.`
+    : ''
+
   const prompt = `You are an expert in the "Best Reflected Self" exercise, a powerful self-development methodology that helps people understand their unique strengths and positive impact on others through feedback from people who know them.
 
 A user named "${requestTitle}" has collected feedback from ${feedbackResponses.length} people who know them well.${requestContext ? ` Context: ${requestContext}` : ''}
 
 Here is all the feedback they received:
 
-${feedbackSummary}
+${feedbackSummary}${challengesSection}
 
 Based on this feedback, create a comprehensive "Best Reflected Self" report. Structure it as follows:
 
 ## Your Best Reflected Self Portrait
+
+### Strengths Overview
+At the very beginning, provide a simple strength visualization in this exact format (this will be parsed by the app):
+<!-- STRENGTHS_DATA_START -->
+[List 5-7 key strengths, one per line, each followed by a number 1-10 representing frequency/emphasis in feedback]
+Example format:
+Leadership: 8
+Empathy: 9
+Problem Solving: 7
+<!-- STRENGTHS_DATA_END -->
 
 ### Core Strengths & Themes
 Identify 3-5 recurring themes or strengths that appear across multiple pieces of feedback. For each theme:
@@ -49,7 +69,10 @@ List the top qualities that define you at your best, drawing from the feedback r
 
 ### Powerful Stories & Moments
 Highlight 2-3 specific stories or moments that were shared in the feedback that exemplify you at your best.
-
+${challenges ? `
+### Overcoming Your Challenges
+Based on the challenges shared ("${challenges}"), explain how the identified strengths can be leveraged to overcome these obstacles. Provide specific, actionable strategies.
+` : ''}
 ### Insights for Growth
 Based on these strengths, provide 3-5 actionable insights for how you can:
 - Leverage these strengths more intentionally

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useLanguage } from '@/lib/LanguageContext'
 
 export default function InviteForm({ requestId }: { requestId: string }) {
   const [emails, setEmails] = useState('')
@@ -9,6 +10,7 @@ export default function InviteForm({ requestId }: { requestId: string }) {
     type: 'success' | 'error'
     text: string
   } | null>(null)
+  const { t } = useLanguage()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,7 +53,7 @@ export default function InviteForm({ requestId }: { requestId: string }) {
     if (failCount === 0) {
       setMessage({
         type: 'success',
-        text: `${successCount} invitation${successCount > 1 ? 's' : ''} sent!`,
+        text: `${successCount} ${t('invitationsSent')}`,
       })
       setEmails('')
     } else if (successCount === 0) {
@@ -73,7 +75,7 @@ export default function InviteForm({ requestId }: { requestId: string }) {
         required
         value={emails}
         onChange={(e) => setEmails(e.target.value)}
-        placeholder="Enter email addresses (one per line or comma-separated)"
+        placeholder={t('enterEmails')}
         rows={3}
         className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
       />
@@ -82,7 +84,7 @@ export default function InviteForm({ requestId }: { requestId: string }) {
         disabled={loading}
         className="mt-2 w-full px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors disabled:opacity-50"
       >
-        {loading ? 'Sending...' : 'Send Invitations'}
+        {loading ? t('sending') : t('sendInvitationsBtn')}
       </button>
       {message && (
         <p
@@ -94,7 +96,7 @@ export default function InviteForm({ requestId }: { requestId: string }) {
         </p>
       )}
       <p className="mt-2 text-xs text-gray-500">
-        Enter multiple emails separated by commas or new lines.
+        {t('multipleEmailsHint')}
       </p>
     </form>
   )
