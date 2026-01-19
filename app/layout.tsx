@@ -16,6 +16,22 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Know Your Best Self",
   description: "Discover your strengths through feedback from people who know you best",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
+  openGraph: {
+    title: "Know Your Best Self",
+    description: "Discover your strengths through the eyes of others with the Best Reflected Self exercise",
+    type: "website",
+    images: ["/logo.png"],
+  },
+  twitter: {
+    card: "summary",
+    title: "Know Your Best Self",
+    description: "Discover your strengths through the eyes of others",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({

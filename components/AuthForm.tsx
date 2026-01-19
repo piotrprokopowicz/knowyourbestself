@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '@/lib/LanguageContext'
 import LanguageToggle from './LanguageToggle'
 
@@ -73,8 +74,15 @@ export default function AuthForm({ mode }: AuthFormProps) {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <Link href="/" className="text-2xl font-bold text-purple-600">
-              {t('appName')}
+            <Link href="/" className="inline-flex flex-col items-center gap-2">
+              <Image
+                src="/logo.png"
+                alt="Know Your Best Self"
+                width={64}
+                height={64}
+                className="rounded-full"
+              />
+              <span className="text-2xl font-bold text-purple-600">{t('appName')}</span>
             </Link>
             <h1 className="mt-4 text-2xl font-semibold text-gray-900">
               {mode === 'login' ? t('welcomeBack') : t('createYourAccount')}

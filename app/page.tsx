@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '@/lib/LanguageContext'
 import LanguageToggle from '@/components/LanguageToggle'
 
@@ -10,7 +11,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
       <nav className="flex items-center justify-between px-6 py-4 md:px-12">
-        <div className="text-xl font-bold text-white">{t('appName')}</div>
+        <div className="flex items-center gap-3">
+          <Image
+            src="/logo.png"
+            alt="Know Your Best Self"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
+          <span className="text-xl font-bold text-white">{t('appName')}</span>
+        </div>
         <div className="flex items-center gap-4">
           <LanguageToggle variant="dark" className="mr-2" />
           <Link

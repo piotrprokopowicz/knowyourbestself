@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '@/lib/LanguageContext'
 import LanguageToggle from '@/components/LanguageToggle'
 import ShareLink from './ShareLink'

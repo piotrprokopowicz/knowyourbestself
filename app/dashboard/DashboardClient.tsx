@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '@/lib/LanguageContext'
 import LanguageToggle from '@/components/LanguageToggle'
 import RequestCard from '@/components/RequestCard'
@@ -22,8 +23,15 @@ export default function DashboardClient({
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/dashboard" className="text-xl font-bold text-purple-600">
-              {t('appName')}
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <Image
+                src="/logo.png"
+                alt="Know Your Best Self"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+              <span className="text-xl font-bold text-purple-600">{t('appName')}</span>
             </Link>
             <div className="flex items-center gap-4">
               <LanguageToggle />

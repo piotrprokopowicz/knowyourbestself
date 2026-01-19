@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { useLanguage } from '@/lib/LanguageContext'
 import LanguageToggle from './LanguageToggle'
 
@@ -107,7 +108,16 @@ export default function FeedbackForm({
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <div className="text-purple-600 font-bold text-xl mb-2">{t('appName')}</div>
+            <div className="flex flex-col items-center gap-2 mb-4">
+              <Image
+                src="/logo.png"
+                alt="Know Your Best Self"
+                width={56}
+                height={56}
+                className="rounded-full"
+              />
+              <span className="text-purple-600 font-bold text-xl">{t('appName')}</span>
+            </div>
             <h1 className="text-2xl font-bold text-gray-900">
               {t('shareFeedbackFor')}
             </h1>
