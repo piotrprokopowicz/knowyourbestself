@@ -108,6 +108,11 @@ Your feedback is anonymous and will help me understand:
     challengesPlaceholder: 'e.g., I want to improve my leadership presence, handle difficult conversations better...',
     creating: 'Creating...',
     createRequest: 'Create Request',
+    editFeedbackRequest: 'Edit Feedback Request',
+    editRequestDesc: 'Update your feedback request details.',
+    saving: 'Saving...',
+    saveChanges: 'Save Changes',
+    edit: 'Edit',
 
     // Request Detail
     shareYourLink: 'Share Your Link',
@@ -295,6 +300,11 @@ Twoja opinia jest anonimowa i pomoże mi zrozumieć:
     challengesPlaceholder: 'np. Chcę poprawić swoją obecność przywódczą, lepiej radzić sobie z trudnymi rozmowami...',
     creating: 'Tworzenie...',
     createRequest: 'Utwórz Prośbę',
+    editFeedbackRequest: 'Edytuj Prośbę o Feedback',
+    editRequestDesc: 'Zaktualizuj szczegóły swojej prośby o feedback.',
+    saving: 'Zapisywanie...',
+    saveChanges: 'Zapisz Zmiany',
+    edit: 'Edytuj',
 
     // Request Detail
     shareYourLink: 'Udostępnij Swój Link',

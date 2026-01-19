@@ -79,9 +79,30 @@ export default function RequestPageClient({
                 </svg>
               </Link>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">
-                  {request.title}
-                </h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl font-semibold text-gray-900">
+                    {request.title}
+                  </h1>
+                  <Link
+                    href={`/request/${request.id}/edit`}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                    title={t('edit')}
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                      />
+                    </svg>
+                  </Link>
+                </div>
                 <p className="text-sm text-gray-500">
                   {new Date(request.created_at).toLocaleDateString(
                     language === 'pl' ? 'pl-PL' : 'en-US',
