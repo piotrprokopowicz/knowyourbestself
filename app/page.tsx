@@ -91,6 +91,96 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Sample Report Preview */}
+        <section className="mt-32 w-full max-w-4xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            {t('sampleReportTitle')}
+          </h2>
+          <p className="text-white/70 mb-8">{t('sampleReportSubtitle')}</p>
+
+          <div className="bg-white rounded-2xl p-6 md:p-8 text-left shadow-2xl">
+            {/* Report Header */}
+            <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
+                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">{t('sampleReportHeader')}</h3>
+                <p className="text-gray-500 text-sm">{t('sampleReportBased')}</p>
+              </div>
+            </div>
+
+            {/* Archetype */}
+            <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-5 mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">🌟</span>
+                <span className="text-sm font-medium text-purple-600 uppercase tracking-wide">{t('sampleArchetypeLabel')}</span>
+              </div>
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">{t('sampleArchetype')}</h4>
+              <p className="text-gray-600">{t('sampleArchetypeDesc')}</p>
+            </div>
+
+            {/* Key Strengths */}
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">{t('sampleStrengthsTitle')}</h4>
+              <div className="grid md:grid-cols-2 gap-3">
+                <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
+                  <span className="text-green-500 mt-0.5">✓</span>
+                  <div>
+                    <span className="font-medium text-gray-900">{t('sampleStrength1')}</span>
+                    <p className="text-sm text-gray-500">{t('sampleStrength1Desc')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
+                  <span className="text-green-500 mt-0.5">✓</span>
+                  <div>
+                    <span className="font-medium text-gray-900">{t('sampleStrength2')}</span>
+                    <p className="text-sm text-gray-500">{t('sampleStrength2Desc')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
+                  <span className="text-green-500 mt-0.5">✓</span>
+                  <div>
+                    <span className="font-medium text-gray-900">{t('sampleStrength3')}</span>
+                    <p className="text-sm text-gray-500">{t('sampleStrength3Desc')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
+                  <span className="text-green-500 mt-0.5">✓</span>
+                  <div>
+                    <span className="font-medium text-gray-900">{t('sampleStrength4')}</span>
+                    <p className="text-sm text-gray-500">{t('sampleStrength4Desc')}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quote */}
+            <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-4 mb-6">
+              <p className="text-gray-700 italic">"{t('sampleQuote')}"</p>
+              <p className="text-sm text-gray-500 mt-2">— {t('sampleQuoteAuthor')}</p>
+            </div>
+
+            {/* Blur overlay for "see more" effect */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/70 to-white flex items-end justify-center pb-4">
+                <Link
+                  href="/signup"
+                  className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors shadow-lg"
+                >
+                  {t('getYourOwnReport')}
+                </Link>
+              </div>
+              <div className="opacity-50 pointer-events-none">
+                <h4 className="text-lg font-semibold text-gray-900 mb-3">{t('sampleInsightsTitle')}</h4>
+                <p className="text-gray-600">{t('sampleInsightsPreview')}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="mt-32 w-full max-w-3xl">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
             {t('whatYoullDiscover')}
