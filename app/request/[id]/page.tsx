@@ -38,11 +38,11 @@ export default async function RequestPage({
     .eq('request_id', id)
     .order('created_at', { ascending: false })
 
-  const { data: report } = await supabase
+  const { data: reports } = await supabase
     .from('reports')
     .select('*')
     .eq('request_id', id)
-    .single()
+    .order('created_at', { ascending: false })
 
   const { data: invitations } = await supabase
     .from('invitations')
@@ -56,7 +56,7 @@ export default async function RequestPage({
     <RequestPageClient
       request={request}
       responses={responses}
-      report={report}
+      reports={reports}
       invitations={invitations}
       feedbackUrl={feedbackUrl}
     />

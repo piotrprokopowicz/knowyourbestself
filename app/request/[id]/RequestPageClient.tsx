@@ -14,6 +14,7 @@ interface RequestPageClientProps {
     id: string
     title: string
     context: string | null
+    challenges: string | null
     status: string
     created_at: string
   }
@@ -28,11 +29,11 @@ interface RequestPageClientProps {
     additional_comments: string | null
     created_at: string
   }> | null
-  report: {
+  reports: Array<{
     id: string
     content: string
     created_at: string
-  } | null
+  }> | null
   invitations: Array<{
     id: string
     email: string
@@ -44,16 +45,28 @@ interface RequestPageClientProps {
 export default function RequestPageClient({
   request,
   responses,
-  report,
+  reports,
   invitations,
   feedbackUrl,
 }: RequestPageClientProps) {
   const { t, language } = useLanguage()
 
+  // Get the latest report
+  const latestReport = reports && reports.length > 0 ? reports[0] : null
+  const pastReports = reports && reports.length > 1 ? reports.slice(1) : []
+
   // Calculate new responses since last report
-  const newResponsesSinceReport = report && responses
-    ? responses.filter(r => new Date(r.created_at) > new Date(report.created_at)).length
+  const newResponsesSinceReport = latestReport && responses
+    ? responses.filter(r => new Date(r.created_at) > new Date(latestReport.created_at)).length
     : 0
+
+  // Determine current step
+  const getProgressStep = () => {
+    if (request.status === 'completed') return 3
+    if (responses && responses.length >= 3) return 2
+    return 1
+  }
+  const currentStep = getProgressStep()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,14 +135,58 @@ export default function RequestPageClient({
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Progress Steps */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+          <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">
+            {t('progressSteps')}
+          </h2>
+          <div className="flex items-center justify-between">
+            {[
+              { step: 1, label: t('step1CreateRequest') },
+              { step: 2, label: t('step2CollectFeedback') },
+              { step: 3, label: t('step3GenerateReport') },
+            ].map(({ step, label }, index) => (
+              <div key={step} className="flex items-center flex-1">
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${
+                      step <= currentStep
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-gray-200 text-gray-500'
+                    }`}
+                  >
+                    {step < currentStep ? (
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      step
+                    )}
+                  </div>
+                  <span className={`mt-2 text-xs text-center ${
+                    step <= currentStep ? 'text-purple-600 font-medium' : 'text-gray-500'
+                  }`}>
+                    {label}
+                  </span>
+                </div>
+                {index < 2 && (
+                  <div className={`flex-1 h-1 mx-2 ${
+                    step < currentStep ? 'bg-purple-600' : 'bg-gray-200'
+                  }`} />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
-            {request.context && (
+            {request.challenges && (
               <div className="bg-white rounded-xl border border-gray-200 p-6">
                 <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                  {t('context')}
+                  {t('challengesToAddress')}
                 </h2>
-                <p className="mt-2 text-gray-700">{request.context}</p>
+                <p className="mt-2 text-gray-700">{request.challenges}</p>
               </div>
             )}
 
@@ -138,7 +195,7 @@ export default function RequestPageClient({
                 <h2 className="text-lg font-semibold text-gray-900">
                   {t('responses')} ({responses?.length || 0})
                 </h2>
-                {request.status === 'completed' && report && (
+                {request.status === 'completed' && latestReport && (
                   <Link
                     href={`/request/${request.id}/report`}
                     className="text-purple-600 hover:text-purple-700 font-medium text-sm"
@@ -205,7 +262,7 @@ export default function RequestPageClient({
               </div>
             )}
 
-            {request.status === 'completed' && report && (
+            {request.status === 'completed' && latestReport && (
               <>
                 <div className="bg-green-50 rounded-xl border border-green-200 p-6">
                   <div className="flex items-center justify-between">
@@ -225,6 +282,39 @@ export default function RequestPageClient({
                     </Link>
                   </div>
                 </div>
+
+                {/* Past Reports List */}
+                {pastReports.length > 0 && (
+                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                      {t('pastReports')}
+                    </h2>
+                    <ul className="space-y-3">
+                      {pastReports.map((pastReport, index) => (
+                        <li key={pastReport.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                          <div className="text-sm text-gray-600">
+                            {new Date(pastReport.created_at).toLocaleDateString(
+                              language === 'pl' ? 'pl-PL' : 'en-US',
+                              {
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              }
+                            )}
+                          </div>
+                          <Link
+                            href={`/request/${request.id}/report/${pastReport.id}`}
+                            className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+                          >
+                            {t('viewPastReport')} →
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* Regenerate option - always show for completed requests */}
                 <div className="bg-indigo-50 rounded-xl border border-indigo-200 p-6">

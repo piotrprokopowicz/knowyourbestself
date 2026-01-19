@@ -78,15 +78,8 @@ export async function POST(request: Request) {
       .eq('id', requestId)
 
     try {
-      // If regenerating, delete the old report first
-      if (isRegeneration) {
-        await serviceSupabase
-          .from('reports')
-          .delete()
-          .eq('request_id', requestId)
-      }
-
       // Generate report using Claude with challenges and language preference
+      // Note: We no longer delete old reports - they are kept for history
       const reportContent = await generateBestReflectedSelfReport(
         responses,
         feedbackRequest.title,

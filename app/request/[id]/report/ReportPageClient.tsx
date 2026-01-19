@@ -12,14 +12,16 @@ interface ReportPageClientProps {
     content: string
     created_at: string
   }
+  isPastReport?: boolean
 }
 
 export default function ReportPageClient({
   requestId,
   requestTitle,
   report,
+  isPastReport = false,
 }: ReportPageClientProps) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -58,6 +60,29 @@ export default function ReportPageClient({
       </header>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {isPastReport && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+            <svg className="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <span className="text-amber-800 font-medium">{t('pastReport')}</span>
+              <span className="text-amber-700 ml-2">
+                {new Date(report.created_at).toLocaleDateString(
+                  language === 'pl' ? 'pl-PL' : 'en-US',
+                  {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }
+                )}
+              </span>
+            </div>
+          </div>
+        )}
+
         <div className="bg-white rounded-xl border border-gray-200 p-8">
           <div className="mb-8 pb-8 border-b border-gray-100">
             <div className="flex items-center gap-4">

@@ -1,16 +1,16 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { redirect, notFound } from 'next/navigation'
-import ReportPageClient from './ReportPageClient'
+import ReportPageClient from '../ReportPageClient'
 
 // Disable caching to always fetch fresh report data
 export const dynamic = 'force-dynamic'
 
-export default async function ReportPage({
+export default async function PastReportPage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string; reportId: string }>
 }) {
-  const { id } = await params
+  const { id, reportId } = await params
   const supabase = await createServerSupabaseClient()
 
   const {
@@ -32,25 +32,24 @@ export default async function ReportPage({
     notFound()
   }
 
-  // Get the latest report
-  const { data: reports, error: reportError } = await supabase
+  // Get the specific report by ID
+  const { data: report, error: reportError } = await supabase
     .from('reports')
     .select('*')
+    .eq('id', reportId)
     .eq('request_id', id)
-    .order('created_at', { ascending: false })
-    .limit(1)
+    .single()
 
-  if (reportError || !reports || reports.length === 0) {
+  if (reportError || !report) {
     redirect(`/request/${id}`)
   }
-
-  const report = reports[0]
 
   return (
     <ReportPageClient
       requestId={id}
       requestTitle={request.title}
       report={report}
+      isPastReport
     />
   )
 }
