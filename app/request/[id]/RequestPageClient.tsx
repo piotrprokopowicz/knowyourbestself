@@ -7,6 +7,7 @@ import ShareLink from './ShareLink'
 import ResponseList from './ResponseList'
 import InviteForm from './InviteForm'
 import AnalyzeButton from './AnalyzeButton'
+import AddResponseForm from './AddResponseForm'
 
 interface RequestPageClientProps {
   request: {
@@ -154,6 +155,8 @@ export default function RequestPageClient({
                   {t('noResponsesYet')}
                 </p>
               )}
+
+              <AddResponseForm requestId={request.id} />
             </div>
 
             {responses && responses.length >= 3 && request.status === 'open' && (
