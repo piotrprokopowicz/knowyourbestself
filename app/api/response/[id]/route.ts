@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@/lib/supabase-server'
+import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 export async function DELETE(
@@ -8,6 +8,7 @@ export async function DELETE(
   try {
     const { id } = await params
     const supabase = await createServerSupabaseClient()
+    const serviceSupabase = createServiceRoleClient()
 
     // Verify user is authenticated
     const {
@@ -19,7 +20,7 @@ export async function DELETE(
     }
 
     // First, get the response to find which request it belongs to
-    const { data: response, error: fetchError } = await supabase
+    const { data: response, error: fetchError } = await serviceSupabase
       .from('feedback_responses')
       .select('request_id')
       .eq('id', id)
@@ -47,8 +48,8 @@ export async function DELETE(
       )
     }
 
-    // Delete the response
-    const { error: deleteError } = await supabase
+    // Delete the response using service role client (bypasses RLS)
+    const { error: deleteError } = await serviceSupabase
       .from('feedback_responses')
       .delete()
       .eq('id', id)

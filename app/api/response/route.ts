@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@/lib/supabase-server'
+import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -22,6 +22,7 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createServerSupabaseClient()
+    const serviceSupabase = createServiceRoleClient()
 
     // Verify user is authenticated
     const {
@@ -47,8 +48,8 @@ export async function POST(request: Request) {
       )
     }
 
-    // Insert the manual response
-    const { data, error: insertError } = await supabase
+    // Insert the manual response using service role client (bypasses RLS)
+    const { data, error: insertError } = await serviceSupabase
       .from('feedback_responses')
       .insert({
         request_id: requestId,
