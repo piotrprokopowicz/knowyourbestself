@@ -140,40 +140,44 @@ export default function RequestPageClient({
           <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">
             {t('progressSteps')}
           </h2>
-          <div className="flex items-center justify-between">
+          <div className="flex items-start">
             {[
               { step: 1, label: t('step1CreateRequest') },
               { step: 2, label: t('step2CollectFeedback') },
               { step: 3, label: t('step3GenerateReport') },
             ].map(({ step, label }, index) => (
-              <div key={step} className="flex items-center flex-1">
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${
-                      step <= currentStep
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-gray-200 text-gray-500'
-                    }`}
-                  >
-                    {step < currentStep ? (
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                      step
-                    )}
-                  </div>
-                  <span className={`mt-2 text-xs text-center ${
-                    step <= currentStep ? 'text-purple-600 font-medium' : 'text-gray-500'
-                  }`}>
-                    {label}
-                  </span>
-                </div>
+              <div key={step} className="flex-1 flex flex-col items-center relative">
+                {/* Connecting line - positioned behind the circle */}
                 {index < 2 && (
-                  <div className={`flex-1 h-1 mx-2 ${
-                    step < currentStep ? 'bg-purple-600' : 'bg-gray-200'
-                  }`} />
+                  <div
+                    className={`absolute top-5 left-1/2 w-full h-0.5 ${
+                      step < currentStep ? 'bg-purple-600' : 'bg-gray-200'
+                    }`}
+                    style={{ transform: 'translateY(-50%)' }}
+                  />
                 )}
+                {/* Circle */}
+                <div
+                  className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${
+                    step <= currentStep
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-200 text-gray-500'
+                  }`}
+                >
+                  {step < currentStep ? (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    step
+                  )}
+                </div>
+                {/* Label */}
+                <span className={`mt-2 text-xs text-center max-w-[100px] ${
+                  step <= currentStep ? 'text-purple-600 font-medium' : 'text-gray-500'
+                }`}>
+                  {label}
+                </span>
               </div>
             ))}
           </div>

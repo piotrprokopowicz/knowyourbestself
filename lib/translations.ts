@@ -118,14 +118,16 @@ export const translations = {
     contextPlaceholder: "e.g., I'm working on understanding my strengths as part of a leadership development program...",
     emailTemplate: 'Email Message',
     emailTemplateHint: 'This is the message that will be sent to people you invite. You can customize it below.',
-    defaultEmailTemplate: `I'm working on understanding my strengths and positive impact on others through the "Best Reflected Self" exercise.
+    defaultEmailTemplate: `I'm participating in a self-development exercise called "Best Reflected Self".
 
-I've asked you to share your perspective because you know me well and can provide valuable insight.
+The goal is to gather stories and observations from people who know me well, to better understand when I bring the most value and how I can leverage my strengths more effectively.
 
-Your feedback is anonymous and will help me understand:
-• My key strengths and positive qualities
-• Memorable moments when I was at my best
-• The unique value I bring to relationships`,
+I'm reaching out to you because your perspective matters — you've seen me in action and can share genuine examples. What I'd love to hear from you:
+• Specific moments when you saw me at my best
+• Strengths you notice in our interactions
+• The positive impact I have on you or others
+
+Your feedback will remain anonymous and become part of my development report. Thank you!`,
     challenges: 'Challenges to Address (optional)',
     challengesHint: 'What challenges or obstacles are you facing? The report will include insights on how your strengths can help.',
     challengesPlaceholder: 'e.g., I want to improve my leadership presence, handle difficult conversations better...',
@@ -352,14 +354,16 @@ Your feedback is anonymous and will help me understand:
     contextPlaceholder: 'np. Pracuję nad zrozumieniem moich mocnych stron w ramach programu rozwoju przywództwa...',
     emailTemplate: 'Treść Wiadomości Email',
     emailTemplateHint: 'To jest wiadomość, która zostanie wysłana do osób, które zaprosisz. Możesz ją dostosować poniżej.',
-    defaultEmailTemplate: `Pracuję nad zrozumieniem moich mocnych stron i pozytywnego wpływu na innych poprzez ćwiczenie "Najlepsze Odbicie Siebie".
+    defaultEmailTemplate: `Biorę udział w ćwiczeniu rozwojowym "Best Reflected Self" (Najlepsze Odbicie Siebie).
 
-Poprosiłem/am Cię o podzielenie się swoją perspektywą, ponieważ dobrze mnie znasz i możesz dostarczyć cennych spostrzeżeń.
+Polega ono na zebraniu historii i obserwacji od osób z mojego otoczenia, aby lepiej zrozumieć, kiedy wnoszę największą wartość i jak mogę skuteczniej wykorzystywać swoje mocne strony.
 
-Twoja opinia jest anonimowa i pomoże mi zrozumieć:
-• Moje kluczowe mocne strony i pozytywne cechy
-• Pamiętne momenty, kiedy byłem/am w najlepszej formie
-• Unikalną wartość, którą wnoszę do relacji`,
+Zwracam się do Ciebie, bo Twoja perspektywa jest cenna — znasz mnie i możesz podzielić się autentycznymi przykładami. Chciałabym/Chciałbym usłyszeć o:
+• Konkretnych sytuacjach, gdy byłam/byłem w najlepszej formie
+• Mocnych stronach, które zauważasz w naszych interakcjach
+• Pozytywnym wpływie, jaki mam na Ciebie lub innych
+
+Twoja opinia pozostanie anonimowa i będzie częścią mojego raportu rozwojowego. Dziękuję!`,
     challenges: 'Wyzwania do Rozwiązania (opcjonalnie)',
     challengesHint: 'Jakie wyzwania lub przeszkody napotykasz? Raport będzie zawierał wskazówki, jak Twoje mocne strony mogą pomóc.',
     challengesPlaceholder: 'np. Chcę poprawić swoją obecność przywódczą, lepiej radzić sobie z trudnymi rozmowami...',

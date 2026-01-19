@@ -84,19 +84,30 @@ icon: [Choose ONE emoji: 🌟 ⭐ 💡 🎯 🔥 💪 🌊 🦁 🦋 🌱 🎨 �
 description: [One sentence${language === 'pl' ? ' IN POLISH' : ''} describing what makes this archetype unique]
 <!-- ARCHETYPE_DATA_END -->
 
+SECOND, provide EXACTLY 4 key strengths in this exact format (will be parsed by the app to display as cards):
+
+<!-- STRENGTHS_CARDS_START -->
+strength1_title: [Short 2-3 word title${language === 'pl' ? ' IN POLISH' : ''}]
+strength1_desc: [One short sentence describing how it manifests${language === 'pl' ? ' IN POLISH' : ''}]
+strength2_title: [Short 2-3 word title${language === 'pl' ? ' IN POLISH' : ''}]
+strength2_desc: [One short sentence describing how it manifests${language === 'pl' ? ' IN POLISH' : ''}]
+strength3_title: [Short 2-3 word title${language === 'pl' ? ' IN POLISH' : ''}]
+strength3_desc: [One short sentence describing how it manifests${language === 'pl' ? ' IN POLISH' : ''}]
+strength4_title: [Short 2-3 word title${language === 'pl' ? ' IN POLISH' : ''}]
+strength4_desc: [One short sentence describing how it manifests${language === 'pl' ? ' IN POLISH' : ''}]
+<!-- STRENGTHS_CARDS_END -->
+
+THIRD, provide ONE powerful quote from the feedback that best captures this person at their best:
+
+<!-- QUOTE_START -->
+quote: [A meaningful quote or paraphrased feedback${language === 'pl' ? ' IN POLISH' : ''}]
+source: [${language === 'pl' ? 'Opinia od współpracownika/przyjaciela/etc.' : 'Feedback from a colleague/friend/etc.'}]
+<!-- QUOTE_END -->
+
 Then continue with the following sections:
 
-## ${sectionHeadings.coreStrengths}
-Identify 3-5 recurring themes or strengths that appear across multiple pieces of feedback. For each theme:
-- Give it a clear, memorable name
-- Explain how it manifests based on the feedback
-- Include specific examples or quotes from the feedback
-
 ## ${sectionHeadings.uniqueImpact}
-Describe how this person positively impacts others. What do people experience when they interact with them? What makes them memorable?
-
-## ${sectionHeadings.keyQualities}
-List the top qualities that define this person at their best, drawing from the feedback received.
+Describe how this person positively impacts others. What do people experience when they interact with them? What makes them memorable? Keep it to 2-3 paragraphs.
 
 ## ${sectionHeadings.powerfulStories}
 Highlight 2-3 specific stories or moments that were shared in the feedback that exemplify this person at their best.
@@ -115,7 +126,7 @@ A 2-3 paragraph narrative that captures who this person is at their best, writte
 
 Make the report personal, insightful, and actionable. Focus on specific examples from the feedback rather than generic statements.
 
-CRITICAL: You MUST include the <!-- ARCHETYPE_DATA_START --> block exactly as shown. This is parsed by the application. Do not skip it or modify the format.${language === 'pl' ? ' REMEMBER: THE ENTIRE REPORT MUST BE IN POLISH.' : ''}`
+CRITICAL: You MUST include ALL THREE data blocks (ARCHETYPE_DATA, STRENGTHS_CARDS, QUOTE) exactly as shown. These are parsed by the application. Do not skip them or modify the format.${language === 'pl' ? ' REMEMBER: THE ENTIRE REPORT MUST BE IN POLISH.' : ''}`
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',

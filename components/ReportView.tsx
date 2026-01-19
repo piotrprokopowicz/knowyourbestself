@@ -15,6 +15,16 @@ interface ArchetypeData {
   description: string
 }
 
+interface StrengthCard {
+  title: string
+  description: string
+}
+
+interface QuoteData {
+  quote: string
+  source: string
+}
+
 export default function ReportView({
   content,
   title,
@@ -48,11 +58,52 @@ export default function ReportView({
     }
   }, [content])
 
+  // Parse strength cards from the report
+  const strengthCards = useMemo((): StrengthCard[] => {
+    const match = content.match(/<!-- STRENGTHS_CARDS_START -->([\s\S]*?)<!-- STRENGTHS_CARDS_END -->/)
+    if (!match) return []
+
+    const dataSection = match[1]
+    const cards: StrengthCard[] = []
+
+    for (let i = 1; i <= 4; i++) {
+      const titleMatch = dataSection.match(new RegExp(`strength${i}_title:\\s*(.+)`))
+      const descMatch = dataSection.match(new RegExp(`strength${i}_desc:\\s*(.+)`))
+      if (titleMatch) {
+        cards.push({
+          title: titleMatch[1].trim(),
+          description: descMatch ? descMatch[1].trim() : '',
+        })
+      }
+    }
+
+    return cards
+  }, [content])
+
+  // Parse quote data from the report
+  const quoteData = useMemo((): QuoteData | null => {
+    const match = content.match(/<!-- QUOTE_START -->([\s\S]*?)<!-- QUOTE_END -->/)
+    if (!match) return null
+
+    const dataSection = match[1]
+    const quoteMatch = dataSection.match(/quote:\s*(.+)/)
+    const sourceMatch = dataSection.match(/source:\s*(.+)/)
+
+    if (!quoteMatch) return null
+
+    return {
+      quote: quoteMatch[1].trim(),
+      source: sourceMatch ? sourceMatch[1].trim() : '',
+    }
+  }, [content])
+
   // Remove the data sections from displayed content
   const displayContent = useMemo(() => {
     return content
       .replace(/<!-- ARCHETYPE_DATA_START -->[\s\S]*?<!-- ARCHETYPE_DATA_END -->/, '')
       .replace(/<!-- STRENGTHS_DATA_START -->[\s\S]*?<!-- STRENGTHS_DATA_END -->/, '')
+      .replace(/<!-- STRENGTHS_CARDS_START -->[\s\S]*?<!-- STRENGTHS_CARDS_END -->/, '')
+      .replace(/<!-- QUOTE_START -->[\s\S]*?<!-- QUOTE_END -->/, '')
   }, [content])
 
   // Helper function to process inline markdown formatting
@@ -198,19 +249,47 @@ export default function ReportView({
 
       {/* Archetype Display */}
       {archetypeData && (
-        <div className="mb-8 p-8 bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-700 rounded-2xl shadow-lg text-center">
-          <div className="text-7xl mb-4">
-            {archetypeData.icon}
+        <div className="mb-8 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-3xl">{archetypeData.icon}</span>
+            <span className="text-sm font-medium text-purple-600 uppercase tracking-wide">
+              {language === 'pl' ? 'Twój Archetyp' : 'Your Archetype'}
+            </span>
           </div>
-          <p className="text-purple-200 text-sm uppercase tracking-wider mb-2">
-            {language === 'pl' ? 'Twój Archetyp' : 'Your Archetype'}
-          </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
             {archetypeData.name}
           </h2>
-          <p className="text-purple-100 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600">
             {archetypeData.description}
           </p>
+        </div>
+      )}
+
+      {/* Strength Cards */}
+      {strengthCards.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            {language === 'pl' ? 'Kluczowe Mocne Strony' : 'Key Strengths Identified'}
+          </h3>
+          <div className="grid md:grid-cols-2 gap-3">
+            {strengthCards.map((card, index) => (
+              <div key={index} className="flex items-start gap-3 bg-gray-50 rounded-lg p-4">
+                <span className="text-green-500 mt-0.5 text-lg">✓</span>
+                <div>
+                  <span className="font-medium text-gray-900">{card.title}</span>
+                  <p className="text-sm text-gray-500 mt-1">{card.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Quote */}
+      {quoteData && (
+        <div className="mb-8 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-5">
+          <p className="text-gray-700 italic text-lg">"{quoteData.quote}"</p>
+          <p className="text-sm text-gray-500 mt-3">— {quoteData.source}</p>
         </div>
       )}
 

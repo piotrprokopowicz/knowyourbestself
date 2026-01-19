@@ -11,7 +11,7 @@ const emailTranslations = {
     shareYourFeedback: 'Share Your Feedback',
     timeEstimate: 'This should only take 5-10 minutes. Your thoughtful responses will make a real difference!',
     ignoreNotice: "If you weren't expecting this email, you can safely ignore it.",
-    subjectSuffix: 'is asking for your feedback',
+    subjectSuffix: 'would like your feedback',
   },
   pl: {
     appName: 'Poznaj Swoje Najlepsze Ja',
@@ -38,28 +38,36 @@ export async function sendFeedbackInvitation(
       ? `<p>${customTemplate.replace(/\n/g, '</p><p>')}</p>`
       : language === 'pl'
       ? `
-    <p><strong>${requesterName}</strong> pracuje nad zrozumieniem swoich mocnych stron i pozytywnego wpływu na innych poprzez ćwiczenie "Najlepsze Odbicie Siebie".</p>
+    <p><strong>${requesterName}</strong> bierze udział w ćwiczeniu rozwojowym "Best Reflected Self" (Najlepsze Odbicie Siebie).</p>
 
-    <p>Poproszono Cię o podzielenie się swoją perspektywą, ponieważ dobrze znasz tę osobę i możesz dostarczyć cennych spostrzeżeń.</p>
+    <p>Polega ono na zebraniu historii i obserwacji od osób z otoczenia, aby lepiej zrozumieć, kiedy wnosi największą wartość i jak może skuteczniej wykorzystywać swoje mocne strony.</p>
 
-    <p>Twoja opinia jest anonimowa i pomoże zrozumieć:</p>
+    <p>Zwraca się do Ciebie, bo Twoja perspektywa jest cenna — znasz tę osobę i możesz podzielić się autentycznymi przykładami.</p>
+
+    <p style="color: #4b5563;"><strong>Co chcielibyśmy od Ciebie usłyszeć:</strong></p>
     <ul style="color: #4b5563;">
-      <li>Kluczowe mocne strony i pozytywne cechy</li>
-      <li>Pamiętne momenty, kiedy ta osoba była w najlepszej formie</li>
-      <li>Unikalną wartość, którą wnosi do relacji</li>
+      <li>Konkretne sytuacje, gdy ta osoba była w najlepszej formie</li>
+      <li>Mocne strony, które zauważasz na co dzień</li>
+      <li>Pozytywny wpływ, jaki ma na innych</li>
     </ul>
+
+    <p style="color: #6b7280;">Twoja opinia pozostanie anonimowa i będzie częścią raportu rozwojowego.</p>
     `
       : `
-    <p><strong>${requesterName}</strong> is working on understanding their strengths and positive impact on others through the "Best Reflected Self" exercise.</p>
+    <p><strong>${requesterName}</strong> is participating in a self-development exercise called "Best Reflected Self".</p>
 
-    <p>They've asked you to share your perspective because you know them well and can provide valuable insight.</p>
+    <p>The goal is to gather stories and observations from people who know them well, to better understand when they bring the most value and how they can leverage their strengths more effectively.</p>
 
-    <p>Your feedback is anonymous and will help them understand:</p>
+    <p>They're reaching out to you because your perspective matters — you've seen them in action and can share genuine examples.</p>
+
+    <p style="color: #4b5563;"><strong>What we'd love to hear from you:</strong></p>
     <ul style="color: #4b5563;">
-      <li>Their key strengths and positive qualities</li>
-      <li>Memorable moments when they were at their best</li>
-      <li>The unique value they bring to relationships</li>
+      <li>Specific moments when you saw them at their best</li>
+      <li>Strengths you notice in your interactions</li>
+      <li>The positive impact they have on others</li>
     </ul>
+
+    <p style="color: #6b7280;">Your feedback will remain anonymous and become part of their development report.</p>
     `
 
     const { error } = await resend.emails.send({
