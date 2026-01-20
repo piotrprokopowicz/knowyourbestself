@@ -219,6 +219,36 @@ export default function RequestPageClient({
               )}
 
               <AddResponseForm requestId={request.id} />
+
+              {/* Progress to unlock report */}
+              {request.status === 'open' && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-700">
+                      {t('progressToReport')}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      {responses?.length || 0} / 3
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className={`h-2.5 rounded-full transition-all duration-500 ${
+                        (responses?.length || 0) >= 3 ? 'bg-green-500' : 'bg-purple-600'
+                      }`}
+                      style={{ width: `${Math.min(((responses?.length || 0) / 3) * 100, 100)}%` }}
+                    />
+                  </div>
+                  {(responses?.length || 0) < 3 && (
+                    <p className="mt-2 text-sm text-gray-500">
+                      {3 - (responses?.length || 0) === 1
+                        ? t('oneMoreResponse')
+                        : `${3 - (responses?.length || 0)} ${t('moreResponses')}`
+                      }
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
             {responses && responses.length >= 3 && request.status === 'open' && (
